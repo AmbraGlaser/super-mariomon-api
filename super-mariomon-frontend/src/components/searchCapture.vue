@@ -1,61 +1,60 @@
 <template>
-    <div class="min-h-screen bg-zinc-900 text-white flex flex-col items-center justify-center gap-6">
-      <h1 class="text-5xl font-extrabold text-center">Zoek een <br />Capture</h1>
-  
-      <div class="search-container">
-  <input
-    v-model="searchTerm"
-    type="text"
-    placeholder="Naam of dexNumber"
-  />
-  <button @click="searchCapture">Zoek</button>
-</div>
+  <div class="min-h-screen bg-zinc-900 text-white flex flex-col items-center justify-center gap-6">
+    <h1 class="text-5xl font-extrabold text-center">Zoek een <br />Capture</h1>
 
-  
-      <div v-if="foutmelding" class="text-red-400 flex items-center gap-2">
-        <span class="text-2xl">❌</span>
-        <span>Geen capture gevonden.</span>
-      </div>
-  
-      <div v-if="gevondenCapture" class="bg-zinc-800 p-6 rounded shadow w-96 text-center">
-        <h2 class="text-xl font-bold">{{ gevondenCapture.naam }}</h2>
-        <p>Dex #: {{ gevondenCapture.dexNumber }}</p>
-        <p>Type: {{ gevondenCapture.type1 }}{{ gevondenCapture.type2 ? ' / ' + gevondenCapture.type2 : '' }}</p>
-        <p>HP: {{ gevondenCapture.HP }} | Atk: {{ gevondenCapture.Atk }} | Spe: {{ gevondenCapture.Spe }}</p>
-      </div>
+    <div class="search-container">
+      <input
+        v-model="searchTerm"
+        type="text"
+        placeholder="Naam of dexNumber"
+      />
+      <button @click="searchCapture">Zoek</button>
     </div>
-  </template>
-  
-  <script setup>
-  import { ref } from 'vue'
-  import axios from 'axios'
-  
-  const zoekTerm = ref('')
-  const gevondenCapture = ref(null)
-  const foutmelding = ref(false)
-  
-  const zoekCapture = async () => {
-    foutmelding.value = false
-    gevondenCapture.value = null
-  
-    try {
-      const response = await axios.get('http://localhost:3000/api/captures')
-      const zoek = zoekTerm.value.toLowerCase()
-  
-      const found = response.data.find(
-        capture =>
-          capture.naam.toLowerCase().includes(zoek) || capture.dexNumber === Number(zoek)
-      )
-  
-      if (found) {
-        gevondenCapture.value = found
-      } else {
-        foutmelding.value = true
-      }
-    } catch (err) {
-      foutmelding.value = true
-      console.error(err)
+
+    <div v-if="error" class="text-red-400 flex items-center gap-2">
+      <span class="text-2xl">❌</span>
+      <span>Geen capture gevonden.</span>
+    </div>
+
+    <div v-if="foundCapture" class="bg-zinc-800 p-6 rounded shadow w-96 text-center">
+      <h2 class="text-xl font-bold">{{ foundCapture.naam }}</h2>
+      <p>Dex #: {{ foundCapture.dexNumber }}</p>
+      <p>Type: {{ foundCapture.type1 }}{{ foundCapture.type2 ? ' / ' + foundCapture.type2 : '' }}</p>
+      <p>HP: {{ foundCapture.HP }} | Atk: {{ foundCapture.Atk }} | Spe: {{ foundCapture.Spe }}</p>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref } from 'vue'
+import axios from 'axios'
+
+const searchTerm = ref('')
+const foundCapture = ref(null)
+const error = ref(false)
+
+const searchCapture = async () => {
+  error.value = false
+  foundCapture.value = null
+
+  try {
+    const response = await axios.get('http://localhost:3000/api/captures')
+    const search = searchTerm.value.toLowerCase()
+
+    const found = response.data.find(
+      capture =>
+        capture.naam.toLowerCase().includes(search) ||
+        capture.dexNumber === Number(search)
+    )
+
+    if (found) {
+      foundCapture.value = found
+    } else {
+      error.value = true
     }
+  } catch (err) {
+    error.value = true
+    console.error(err)
   }
-  </script>
-  
+}
+</script>
