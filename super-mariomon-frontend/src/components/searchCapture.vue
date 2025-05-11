@@ -38,7 +38,7 @@ const searchCapture = async () => {
   foundCapture.value = null
 
   try {
-    const response = await axios.get('http://localhost:3000/api/captures')
+    const response = await axios.get('http://192.168.120.12:3306/api/captures')
     const search = searchTerm.value.toLowerCase()
 
     const found = response.data.find(

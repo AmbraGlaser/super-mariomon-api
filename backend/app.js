@@ -5,6 +5,7 @@ app.use(cors());
 require("dotenv").config();
 const sequelize = require("./config/db");
 const db = require("./models");
+require("./seed-captures-final");
 
 app.use(express.json());
 
