@@ -33,12 +33,14 @@ const searchTerm = ref('')
 const foundCapture = ref(null)
 const error = ref(false)
 
+const API_URL = import.meta.env.VITE_API_BASE_URL
+
 const searchCapture = async () => {
   error.value = false
   foundCapture.value = null
 
   try {
-    const response = await axios.get('http://192.168.120.12:3306/api/captures')
+    const response = await axios.get(`${API_URL}/api/captures`)
     const search = searchTerm.value.toLowerCase()
 
     const found = response.data.find(
@@ -54,7 +56,7 @@ const searchCapture = async () => {
     }
   } catch (err) {
     error.value = true
-    console.error(err)
+    console.error("Fout bij ophalen van captures:", err)
   }
 }
 </script>
