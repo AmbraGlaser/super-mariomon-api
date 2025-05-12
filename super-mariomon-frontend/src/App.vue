@@ -1,6 +1,7 @@
 <template>
   <nav class="flex gap-4 justify-center my-4">
-    <router-link to="/">🔍 Zoek</router-link>
+    <router-link to="/">🗂️ Dex</router-link>
+    <router-link to="/search">🔍 Zoek</router-link>
     <router-link v-if="!loggedIn" to="/login">🔐 Login</router-link>
     <router-link v-if="!loggedIn" to="/register">📝 Registreer</router-link>
     <router-link v-if="loggedIn" to="/profile">👤 Profiel</router-link>
